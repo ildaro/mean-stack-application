@@ -22,7 +22,7 @@ app.post("/api/posts", (req, res, next) => {
   }); //status code for new resource was created and everything is ok
 });
 
-app.use("/api/posts",(req, res, next) => { //requests going to api/posts will reach this code
+app.get("/api/posts",(req, res, next) => { //requests going to api/posts will reach this code
   const posts = [
     {id: "0dummyid", title: "dummy server side post 1", content: "some content from the server"},
     {id: "1dummyid", title: "dummy server side post 2", content: "some content from the server"}
