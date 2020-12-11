@@ -2,6 +2,8 @@ const express = require('express');
 const { stringify } = require('querystring');
 const bodyParser = require('body-parser');
 
+const Post = require('./models/post');
+
 const app = express(); //execute express as a function and store in app
 
 app.use(bodyParser.json()); //express middleware for parsing json data
@@ -15,7 +17,10 @@ app.use((req, res, next)=> {
 });
 
 app.post("/api/posts", (req, res, next) => {
-  const post = req.body;
+  const post = new Post({
+    title: req.body.title,
+    content: req.body.content
+  });
   console.log(post);
   res.status(201).json({
     message: "post added successfully"
