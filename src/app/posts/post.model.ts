@@ -4,4 +4,4 @@ export interface Post {
   content: String;
 }
 
-// a model is used to ensure what a post looks like in the app
+// a model is used to enforce what a post looks like in the app
