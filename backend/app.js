@@ -1,10 +1,25 @@
 const express = require('express');
 const { stringify } = require('querystring');
 const bodyParser = require('body-parser');
+const PropertiesReader = require('properties-reader');
+const dbProperties = PropertiesReader('C:/Users/ildar/Documents/mean-stack-application-master/backend/db.properties');
+const mongoose = require('mongoose');
 
 const Post = require('./models/post');
 
+//username and password for db connection read from db.properties file
+var name = dbProperties.get('db.user.name');
+var password = dbProperties.get('db.password');
+
 const app = express(); //execute express as a function and store in app
+
+mongoose.connect("mongodb+srv://"+name+":"+password+"@cluster0.atept.mongodb.net/cluster0?retryWrites=true&w=majority")
+  .then(() => {
+    console.log("Connected to the DB");
+  })
+  .catch(() => {
+    console.log("Connection to DB failed.");
+  });
 
 app.use(bodyParser.json()); //express middleware for parsing json data
 
