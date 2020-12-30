@@ -36,10 +36,12 @@ app.post("/api/posts", (req, res, next) => {
     title: req.body.title,
     content: req.body.content
   });
-  post.save(); //adds post to the database
-  res.status(201).json({
-    message: "post added successfully"
-  }); //status code for new resource was created and everything is ok
+  post.save().then(result => {
+    res.status(201).json({
+      message: "post added successfully",
+      postId: result._id
+    }); //status code for new resource was created and everything is ok
+  }); //adds post to the database
 });
 
 app.get("/api/posts",(req, res, next) => { //requests going to api/posts will reach this code
