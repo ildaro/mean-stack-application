@@ -48,6 +48,9 @@ export class PostsService{
       this.http.delete("http://localhost:3000/api/posts/" + postId)
         .subscribe(() => {
           console.log('Deleted');
-        })
+          const updatedPosts = this.posts.filter(post => post.id !== postId) //if true then element is kept else this element is removed from post list
+          this.posts = updatedPosts;
+          this.postsUpdated.next([...this.posts]); //updated list of posts after one is deleted
+        });
     }
 }
