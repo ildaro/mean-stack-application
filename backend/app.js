@@ -13,7 +13,7 @@ var password = dbProperties.get('db.password');
 
 const app = express(); //execute express as a function and store in app
 
-mongoose.connect("mongodb+srv://"+name+":"+password+"@cluster0.atept.mongodb.net/cluster0?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://"+name+":"+password+"@cluster0.atept.mongodb.net/node-angular?retryWrites=true&w=majority")
   .then(() => {
     console.log("Connected to the DB");
   })
@@ -36,21 +36,18 @@ app.post("/api/posts", (req, res, next) => {
     title: req.body.title,
     content: req.body.content
   });
-  console.log(post);
+  post.save(); //adds post to the database
   res.status(201).json({
     message: "post added successfully"
   }); //status code for new resource was created and everything is ok
 });
 
 app.get("/api/posts",(req, res, next) => { //requests going to api/posts will reach this code
-  const posts = [
-    {id: "0dummyid", title: "dummy server side post 1", content: "some content from the server"},
-    {id: "1dummyid", title: "dummy server side post 2", content: "some content from the server"}
-  ];
-
-  res.status(200).json({
-    message:'Posts fetched successfully',
-    posts: posts
+  Post.find().then(documents => {
+      res.status(200).json({
+        message:'Posts fetched successfully',
+        posts: documents
+    });
   });
 });
 
