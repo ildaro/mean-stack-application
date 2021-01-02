@@ -27,7 +27,7 @@ app.use(bodyParser.json()); //express middleware for parsing json data
 app.use((req, res, next)=> {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS"); //which http verbs are allowed to be sent
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS"); //which http verbs are allowed to be sent
   next();
 });
 
@@ -43,6 +43,20 @@ app.post("/api/posts", (req, res, next) => {
     }); //status code for new resource was created and everything is ok
   }); //adds post to the database
 });
+
+
+//edit posts
+app.put("/api/posts/:id", (req, res, next) => {
+  const post = new Post({
+    _id: req.body.id,
+    title: req.body.title,
+    content: req.body.content
+  })
+  Post.updateOne({_id: req.params.id}, post).then(result => {
+    console.log(result);
+    res.status(200).json({ message: "update successful"});
+  })
+})
 
 app.get("/api/posts",(req, res, next) => { //requests going to api/posts will reach this code
   Post.find().then(documents => {
