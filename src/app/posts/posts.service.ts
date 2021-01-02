@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Post } from './post.model'
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({providedIn: 'root'}) //this makes it usable throughout the app and there can only be one instance
 export class PostsService{
   private posts: Post[] = []; //private so it cant be edited from outside
   private postsUpdated = new Subject<Post[]>();
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient, private router: Router){}
 
   //retrieve posts
   getPosts(){
@@ -47,6 +48,7 @@ export class PostsService{
         post.id = id; //update id received from the response
         this.posts.push(post);
         this.postsUpdated.next([...this.posts]);
+        this.router.navigate(["/"]); //navigate back to home page
       });
     }
 
@@ -59,6 +61,7 @@ export class PostsService{
         updatedPosts[oldPostIndex] = post;
         this.posts = updatedPosts;
         this.postsUpdated.next([...this.posts]);
+        this.router.navigate(["/"]);
       });
   }
 

@@ -16,6 +16,7 @@ import { PostsService } from '../posts.service';
 export class PostCreateComponent implements OnInit {
   enteredTitle = '';
   enteredContent = '';
+  isLoading = false;
   private mode = 'create'; //variable to differentiate between editing post or creating post for paramMap
   private postId: string;
   post: Post;
@@ -28,7 +29,9 @@ export class PostCreateComponent implements OnInit {
       if (paramMap.has('postId')){
         this.mode = 'edit';
         this.postId = paramMap.get('postId');
-        this.postsService.getPost(this.postId).subscribe(postData => {
+        this.isLoading = true; //isLoading used to control showing loading spinner
+        this.postsService.getPost(this.postId).subscribe(postData => { // this code executes asynchronously
+          this.isLoading = false;
           this.post = {id: postData._id, title: postData.title, content: postData.content}
         });
       } else {
@@ -43,7 +46,7 @@ export class PostCreateComponent implements OnInit {
     if(form.invalid){ //if the entered values are invalid dont create the post
       return;
     }
-
+    this.isLoading = true;
     if(this.mode === 'create'){
       this.postsService.addPost(form.value.title, form.value.content);
     } else {
