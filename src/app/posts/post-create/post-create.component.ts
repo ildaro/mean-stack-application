@@ -30,7 +30,8 @@ export class PostCreateComponent implements OnInit {
       'title': new FormControl(null,
         {validators: [Validators.required, Validators.minLength(3)]
       }),
-      'content': new FormControl(null, {validators: [Validators.required]})
+      'content': new FormControl(null, {validators: [Validators.required]}),
+      'image' : new FormControl(null, {validators :[Validators.required]})
     });
 
     //no need to unsubscribe from built-in observables
@@ -52,6 +53,13 @@ export class PostCreateComponent implements OnInit {
         this.postId = null; //no postId if we are in create mode
        }
     });
+  }
+
+  //event that is triggered when an image is picked
+  onImagePicked(event: Event){
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({image: file});
+    this.form.get('image').updateValueAndValidity();
   }
 
   //emit the post to post-list component via event binding
