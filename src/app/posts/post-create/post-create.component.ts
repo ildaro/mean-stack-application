@@ -17,7 +17,8 @@ export class PostCreateComponent implements OnInit {
   enteredTitle = '';
   enteredContent = '';
   isLoading = false;
-  form: FormGroup
+  form: FormGroup;
+  imagePreview: string;
   private mode = 'create'; //variable to differentiate between editing post or creating post for paramMap
   private postId: string;
   post: Post;
@@ -60,6 +61,11 @@ export class PostCreateComponent implements OnInit {
     const file = (event.target as HTMLInputElement).files[0];
     this.form.patchValue({image: file});
     this.form.get('image').updateValueAndValidity();
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
   }
 
   //emit the post to post-list component via event binding
