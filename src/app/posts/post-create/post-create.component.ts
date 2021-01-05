@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { fromEventPattern } from 'rxjs';
 import { Post } from '../post.model';
 
 
 import { PostsService } from '../posts.service';
+import { mimeType } from './mime-type.validator';
 
 
 @Component({
@@ -32,7 +34,7 @@ export class PostCreateComponent implements OnInit {
         {validators: [Validators.required, Validators.minLength(3)]
       }),
       'content': new FormControl(null, {validators: [Validators.required]}),
-      'image' : new FormControl(null, {validators :[Validators.required]})
+      'image' : new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]})
     });
 
     //no need to unsubscribe from built-in observables
