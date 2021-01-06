@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const { stringify } = require('querystring');
 const bodyParser = require('body-parser');
 const PropertiesReader = require('properties-reader');
@@ -22,6 +23,7 @@ mongoose.connect("mongodb+srv://"+name+":"+password+"@cluster0.atept.mongodb.net
   });
 
 app.use(bodyParser.json()); //express middleware for parsing json data
+app.use("/images", express.static(path.join("backend/images"))); //any express targeting /images will be allowed to continue
 
 //setting headers to solve CORS error
 app.use((req, res, next)=> {
