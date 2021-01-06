@@ -1,5 +1,6 @@
 const express = require("express");
 const multer = require("multer");
+const { createShorthandPropertyAssignment } = require("typescript");
 
 const Post = require('../models/post');
 const router = express.Router();
@@ -28,19 +29,22 @@ const storage = multer.diskStorage({
 });
 
 router.post("", multer({storage: storage}).single("image"), (req, res, next) => {
+  const url = req.protocol + '://' + req.get("host"); //construct a url to server
   const post = new Post({
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    imagePath: url + "/images/" + req.file.filename
   });
-  post.save().then(result => {
+  post.save().then(createdPost => {
     res.status(201).json({
       message: "post added successfully",
-      postId: result._id
+      post: {
+        ...createdPost,
+        id: createdPost._id
+      }
     }); //status code for new resource was created and everything is ok
   }); //adds post to the database
 });
-
-
 
 //edit posts
 router.put("/:id", (req, res, next) => {

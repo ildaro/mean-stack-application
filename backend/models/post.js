@@ -4,6 +4,7 @@ const mongoose = require('mongoose'); // import mongoose
 const postSchema = mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
+  imagePath: {type: String, required: true }
 });
 
 //export Post model
