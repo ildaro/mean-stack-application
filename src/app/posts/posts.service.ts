@@ -40,12 +40,18 @@ export class PostsService{
   }
 
   //add posts
-  addPost(title: string, content: string){
-    const post: Post = {id: null, title: title, content: content};
-    this.http.post<{message: string, postId: string}>("http://localhost:3000/api/posts", post)
+  addPost(title: string, content: string, image: File){
+    //using FormData instead of JSON data so I can send a file to server
+    const postData = new FormData();
+    postData.append("title", title);
+    postData.append("content", content);
+    postData.append("image", image, title);
+
+    this.http.post<{message: string, postId: string}>("http://localhost:3000/api/posts",
+      postData
+    )
       .subscribe((responseData) => {
-        const id = responseData.postId;
-        post.id = id; //update id received from the response
+        const post: Post = {id: responseData.postId, title: title, content: content};
         this.posts.push(post);
         this.postsUpdated.next([...this.posts]);
         this.router.navigate(["/"]); //navigate back to home page
