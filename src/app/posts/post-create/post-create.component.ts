@@ -30,11 +30,11 @@ export class PostCreateComponent implements OnInit {
   ngOnInit(){
     //using FormGroup for reactive approach to forms, validators are done here instead of html file.
     this.form = new FormGroup({
-      'title': new FormControl(null,
+      title: new FormControl(null,
         {validators: [Validators.required, Validators.minLength(3)]
       }),
-      'content': new FormControl(null, {validators: [Validators.required]}),
-      'image' : new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]})
+       content: new FormControl(null, {validators: [Validators.required]}),
+       image : new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]})
     });
 
     //no need to unsubscribe from built-in observables
@@ -46,10 +46,12 @@ export class PostCreateComponent implements OnInit {
 
         this.postsService.getPost(this.postId).subscribe(postData => { // this code executes asynchronously
           this.isLoading = false;
-          this.post = {id: postData._id, title: postData.title, content: postData.content, imagePath: null}
+          this.post = {id: postData._id, title: postData.title, content: postData.content, imagePath: postData.imagePath}
           this.form.setValue({
-            'title': this.post.title,
-            'content': this.post.content});
+            title: this.post.title,
+            content: this.post.content,
+            image: this.post.imagePath
+          });
         });
       } else {
         this.mode = 'create';
@@ -79,7 +81,7 @@ export class PostCreateComponent implements OnInit {
     if(this.mode === 'create'){
       this.postsService.addPost(this.form.value.title, this.form.value.content, this.form.value.image);
     } else {
-      this.postsService.updatePost(this.postId, this.form.value.title, this.form.value.content)
+      this.postsService.updatePost(this.postId, this.form.value.title, this.form.value.content, this.form.value.image)
     }
     this.form.reset();
   }

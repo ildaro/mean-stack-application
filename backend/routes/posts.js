@@ -1,3 +1,4 @@
+const { IfStmt } = require("@angular/compiler");
 const express = require("express");
 const multer = require("multer");
 const { createShorthandPropertyAssignment } = require("typescript");
@@ -47,11 +48,17 @@ router.post("", multer({storage: storage}).single("image"), (req, res, next) => 
 });
 
 //edit posts
-router.put("/:id", (req, res, next) => {
+router.put("/:id", multer({storage: storage}).single("image"), (req, res, next) => {
+  let imagePath = req.body.imagePath;
+  if (req.file){ //if req.file then a new file was uploaded
+    const url = req.protocol + '://' + req.get("host");
+    imagePath = url + "/images/" + req.file.filename;
+  }
   const post = new Post({
     _id: req.body.id,
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    imagePath: imagePath
   })
   Post.updateOne({_id: req.params.id}, post).then(result => {
     console.log(result);
