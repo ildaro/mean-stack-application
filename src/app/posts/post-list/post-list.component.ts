@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
 
 import { Post } from '../post.model';
@@ -11,14 +12,12 @@ import { PostsService } from '../posts.service';
 })
 
 export class PostListComponent implements OnInit, OnDestroy{
-  /*posts = [
-    { title:"First Post", content: "This is the first post's content" },
-    { title:"Second Post", content: "This is the second post's content" },
-    { title:"Third Post", content: "This is the third post's content" }
-  ];*/
 
   posts: Post[] = [];
-  isLoading = false;
+  isLoading = false; //for the spinner
+  totalPosts = 10; //for paginator
+  postsPerPage = 2;
+  pageSizeOptions = [1,2,5,10];
   private postsSub: Subscription;
 
   constructor(public postsService: PostsService) {}
@@ -37,6 +36,10 @@ export class PostListComponent implements OnInit, OnDestroy{
     this.postsService.deletePost(postId);
   }
 
+  //to handle pages being changed
+  onChangedPage(pageData: PageEvent){
+    console.log(pageData);
+  }
 
   ngOnDestroy(){
     this.postsSub.unsubscribe(); //unsubscribe when this component is not in use
