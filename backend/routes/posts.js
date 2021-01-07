@@ -66,8 +66,18 @@ router.put("/:id", multer({storage: storage}).single("image"), (req, res, next) 
   })
 })
 
-router.get("", (req, res, next) => { //requests going to api/posts will reach this code
-  Post.find().then(documents => {
+//requests going to api/posts will reach this code
+router.get("", (req, res, next) => {
+  const pageSize = +req.query.pagesize; //+ infront of the variable to make it numeric instead of string
+  const currentPage = +req.query.page;
+  const postQuery = Post.find();
+
+  if(pageSize && currentPage){
+    postQuery
+      .skip(pageSize * (currentPage - 1)) //if im on page 2 i want to skip 10 posts for example
+      .limit(pageSize); //narrow down the amount of posts needed
+  }
+  postQuery.then(documents => {
       res.status(200).json({
         message:'Posts fetched successfully',
         posts: documents
