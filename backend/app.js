@@ -7,6 +7,7 @@ const dbProperties = PropertiesReader('C:/Users/ildar/Documents/mean-stack-appli
 const mongoose = require('mongoose');
 
 const postsRoutes = require('./routes/posts');
+const userRoutes = require('./routes/user');
 
 //username and password for db connection read from db.properties file
 var name = dbProperties.get('db.user.name');
@@ -34,5 +35,6 @@ app.use((req, res, next)=> {
 });
 
 app.use("/api/posts", postsRoutes);
+app.use("/api/user", userRoutes);
 
 module.exports = app; //export the express to import in server.js
