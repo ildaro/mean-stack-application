@@ -1,5 +1,7 @@
+import { registerLocaleData } from "@angular/common";
 import { Component } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { AuthService } from "../auth.service";
 
 @Component({
   templateUrl:'./signup.component.html',
@@ -9,7 +11,13 @@ import { NgForm } from "@angular/forms";
 export class SignupComponent{
   isLoading = false;
 
+  constructor(public authService: AuthService) {} //inject AuthService
+
   onSignUp(form: NgForm){
-    console.log(form.value);
+    //if no valid email/password then return
+    if(form.invalid){
+      return;
+    }
+    this.authService.createUser(form.value.email, form.value.password);
   }
 }
