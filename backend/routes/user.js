@@ -28,6 +28,7 @@ router.post("/signup", (req, res, next) => {
 });
 
 router.post("/login", (req, res, next) => {
+  let fetchedUser;
   User.findOne({ email: req.body.email })
     .then(user => {
       if(!user){ //if the user doesnt exist then no
@@ -35,23 +36,28 @@ router.post("/login", (req, res, next) => {
           message: "Auth failed"
         });
       }
+      console.log(user);
+      fetchedUser = user; //to pass user for the next .then block
       return bcrypt.compare(req.body.password, user.password); //returns true if the password matches one in the DB
     })
     .then(result => {
       if (!result){
         return res.status(401).json({
           message: "Auth failed"
-        })
+        });
       }
       const token = jwt.sign( //create a jsonwebtoken
-        { email: user.email, userId: user._id },
+        { email: fetchedUser.email, userId: fetchedUser._id },
          'secret_this_should_be_longer',
         { expiresIn: "1h"} // set token to expire in 1hr
         );
+        res.status(200).json({
+          token: token
+        });
     })
     .catch(err => {
       return res.status(401).json({
-        message: "Auth failed"
+        message: "Auth Failed"
     })
   });
 });
