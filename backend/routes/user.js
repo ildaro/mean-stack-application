@@ -36,7 +36,6 @@ router.post("/login", (req, res, next) => {
           message: "Auth failed"
         });
       }
-      console.log(user);
       fetchedUser = user; //to pass user for the next .then block
       return bcrypt.compare(req.body.password, user.password); //returns true if the password matches one in the DB
     })
