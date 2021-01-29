@@ -1,11 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 
 import { AuthData } from "./auth-data.model";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
   private token: string;
+  private authStatusListener = new Subject<boolean>();
+
   constructor(private http: HttpClient) {}
 
   createUser(email: string, password: string){
@@ -22,10 +25,15 @@ export class AuthService {
       .subscribe(response => {
         const token = response.token; //get token from the response
         this.token = token;
+        this.authStatusListener.next(true); //to know if the user is autherized using authStatusListener
       });
   }
 
   getToken(){
     return this.token;
+  }
+
+  getAuthStatusListener(){
+    return this.authStatusListener.asObservable();
   }
 }
