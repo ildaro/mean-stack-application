@@ -6,6 +6,7 @@ import { AuthData } from "./auth-data.model";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
+  private isAuthenticated = false;
   private token: string;
   private authStatusListener = new Subject<boolean>();
 
@@ -25,12 +26,19 @@ export class AuthService {
       .subscribe(response => {
         const token = response.token; //get token from the response
         this.token = token;
-        this.authStatusListener.next(true); //to know if the user is autherized using authStatusListener
+        if (token) {
+          this.isAuthenticated = true;
+          this.authStatusListener.next(true); //to know if the user is autherized using authStatusListener
+        }
       });
   }
 
   getToken(){
     return this.token;
+  }
+
+  getIsAuth(){
+    return this.isAuthenticated;
   }
 
   getAuthStatusListener(){
