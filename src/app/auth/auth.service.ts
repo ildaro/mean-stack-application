@@ -44,4 +44,11 @@ export class AuthService {
   getAuthStatusListener(){
     return this.authStatusListener.asObservable();
   }
+
+  //logs user out by clearing token and informing any components subscribed
+  logout(){
+    this.token = null;
+    this.isAuthenticated = false;
+    this.authStatusListener.next(false);
+  }
 }
