@@ -22,7 +22,8 @@ export class PostsService{
             title: post.title,
             content: post.content,
             id: post._id,
-            imagePath: post.imagePath
+            imagePath: post.imagePath,
+            creator: post.creator
           }; //map function to make 'id' to be '_id'
         }), maxPosts: postData.maxPosts};
       }))
