@@ -37,7 +37,7 @@ router.post("/login", (req, res, next) => {
         });
       }
       fetchedUser = user; //to pass user for the next .then block
-      return bcrypt.compare(req.body.password, user.password); //returns true if the password matches one in the DB
+      return bcrypt.compare(req.body.password, user.password); //returns true if the password matches the user's in the DB
     })
     .then(result => {
       if (!result){
@@ -52,7 +52,8 @@ router.post("/login", (req, res, next) => {
         );
         res.status(200).json({
           token: token,
-          expiresIn: 3600 //duration in seconds until token expires
+          expiresIn: 3600,  //duration in seconds until token expires
+          userId: fetchedUser._id
         });
     })
     .catch(err => {

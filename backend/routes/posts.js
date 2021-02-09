@@ -43,15 +43,15 @@ router.post(
       imagePath: url + "/images/" + req.file.filename,
       creator: req.userData.userId
     });
-    post.save().then((createdPost) => {
+    post.save().then((createdPost) => { //add post to the database
       res.status(201).json({
         message: "post added successfully",
         post: {
           ...createdPost,
           id: createdPost._id,
         },
-      }); //status code for new resource was created and everything is ok
-    }); //adds post to the database
+      });
+    });
   }
 );
 
