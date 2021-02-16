@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { fromEventPattern } from 'rxjs';
+import { fromEventPattern, Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 import { Post } from '../post.model';
 
 
@@ -15,19 +16,25 @@ import { mimeType } from './mime-type.validator';
     styleUrls: ['./post-create.component.css']
 })
 
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit, OnDestroy {
   enteredTitle = '';
   enteredContent = '';
   isLoading = false;
   form: FormGroup;
   imagePreview: string;
+  post: Post;
   private mode = 'create'; //variable to differentiate between editing post or creating post for paramMap
   private postId: string;
-  post: Post;
+  private authStatusSub: Subscription;
 
-  constructor(public postsService: PostsService, public route: ActivatedRoute){}
+  constructor(public postsService: PostsService, public route: ActivatedRoute, private authSerivce: AuthService){}
 
   ngOnInit(){
+    this.authStatusSub = this.authSerivce
+    .getAuthStatusListener()
+    .subscribe(authStatus => {
+      this.isLoading = false;
+    });
     //using FormGroup for reactive approach to forms, validators are done here instead of html file.
     this.form = new FormGroup({
       title: new FormControl(null,
@@ -84,5 +91,9 @@ export class PostCreateComponent implements OnInit {
       this.postsService.updatePost(this.postId, this.form.value.title, this.form.value.content, this.form.value.image)
     }
     this.form.reset();
+  }
+
+  ngOnDestroy(){
+    this.authStatusSub.unsubscribe();
   }
 }
