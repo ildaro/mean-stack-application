@@ -51,7 +51,12 @@ router.post(
           id: createdPost._id,
         },
       });
-    });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Creating a post failed!"
+      })
+    })
   }
 );
 
@@ -75,13 +80,17 @@ router.put(
       creator: req.userData.userId
     });
     Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post).then((result) => {
-      console.log(result);
       if (result.nModified > 0) { //if the post as actually been updated
         res.status(200).json({ message: "update successful" });
       } else {
         res.status(401).json({ message: "Not Authorized" });
       }
-    });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Could not updated post!"
+      })
+    })
   }
 );
 
@@ -108,7 +117,13 @@ router.get("", (req, res, next) => {
         posts: fetchedPosts,
         maxPosts: count,
       });
-    });
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Fetching post failed!"
+      })
+
+    })
 });
 
 router.get("/:id", (req, res, next) => {
