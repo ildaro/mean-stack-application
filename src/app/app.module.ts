@@ -9,6 +9,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
 import { PostCreateComponent } from './posts/post-create/post-create.component';
@@ -20,6 +21,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 import { ErrorInterceptor } from './error-interceptor';
+import { ErrorComponent } from './error/error.component';
 
 
 
@@ -31,6 +33,7 @@ import { ErrorInterceptor } from './error-interceptor';
     PostListComponent,
     LoginComponent,
     SignupComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +44,7 @@ import { ErrorInterceptor } from './error-interceptor';
     MatInputModule,
     MatCardModule,
     MatButtonModule,
+    MatDialogModule,
     MatToolbarModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
